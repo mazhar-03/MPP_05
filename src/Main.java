@@ -15,7 +15,7 @@ public class Main {
         }
 
         // #clusters because we have 3 species
-        int k = 3;
+        int k = 4;
         KMeans kMeans = new KMeans(k);
         kMeans.fit(data);
 
@@ -24,6 +24,9 @@ public class Main {
 
         double rss = EvaluationMetrics.calculateRSS(clusters, centroids);
         System.out.printf("RSS: %.3f%n", rss);
+
+        ExportUtils.exportObservations("resources/observations.csv", clusters);
+        ExportUtils.exportCentroids("resources/centroids.csv", centroids);
     }
 
     private static double[][] getData(String filePath) {

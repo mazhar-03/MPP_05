@@ -22,12 +22,14 @@ public class KMeans {
         for (int i = 0; i < k; i++)
             assignments.add(i);
 
-        for (int i = 0; i < data.length; i++)
+        for (int i = k; i < data.length; i++)
             assignments.add(rand.nextInt(k));
         Collections.shuffle(assignments);
 
         for (int i = 0; i < data.length; i++)
             clusters.get(assignments.get(i)).add(data[i]);
+
+        updateCentroids();
     }
 
     private int findClosestCluster(double[] vector) {
@@ -49,8 +51,7 @@ public class KMeans {
         if (closestIndices.size() == 1) {
             return closestIndices.getFirst();
         } else {
-            Random random = new Random();
-            return closestIndices.get(random.nextInt(closestIndices.size()));
+            return closestIndices.get(rand.nextInt(closestIndices.size()));
         }
     }
 
@@ -62,6 +63,13 @@ public class KMeans {
 
         for (int i = 0; i < k; i++) {
             List<double[]> points = clusters.get(i);
+
+            if (points.isEmpty()) {
+                // If cluster is empty, keep the old centroid
+                newCentroids[i] = centroids[i];
+                continue;
+            }
+
 
             //assigning new points
             double[] newCentroidsPoints = new double[points.get(0).length];
